@@ -3,7 +3,7 @@ const mongodb = require('mongodb');
 let database;
 
 async function connectToDatabase() {
-  const mongoUrl = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017';
+  const mongoUrl = process.env.MONOGO_URL || 'mongodb://127.0.0.1:27017';
   const client = new mongodb.MongoClient(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
   
   try {
