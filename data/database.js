@@ -4,14 +4,14 @@ const MongoClient = mongodb.MongoClient;
 
 let database;
 
-// let Mongo = 'mongodb://127.0.0.1:27017';
+let Mongo = 'mongodb://127.0.0.1:27017';
 
-// if(process.env.MONOGO_URL){
-//   Mongo = MONOGO_URL;
-// }
+if(process.env.MONOGO_URL){
+  Mongo = process.env.MONOGO_URL;
+}
 
 async function connectToDatabase() {
-  const client = await MongoClient.connect(MONOGO_URL);
+  const client = await MongoClient.connect(Mongo);
   database = client.db('online-shop');
 }
 
