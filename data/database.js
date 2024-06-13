@@ -1,30 +1,29 @@
 const mongodb = require('mongodb');
 
-const MongoClient = mongodb.MongoClient;
-
 let database;
 
-// let Mongo = 'mongodb://127.0.0.1:27017';
-let Mongo = process.env.MONOGO_URL;
-
-// if(process.env.MONOGO_URL){
-//   Mongo = process.env.MONOGO_URL;
-// }
-
 async function connectToDatabase() {
-  const client = await MongoClient.connect(Mongo);
-  database = client.db('online-shop');
+  const mongoUrl = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017';
+  const client = new mongodb.MongoClient(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+  
+  try {
+    await client.connect();
+    database = client.db('online-shop');
+    console.log('Connected to database');
+  } catch (error) {
+    console.error('Failed to connect to the database', error);
+    throw error;
+  }
 }
 
 function getDb() {
   if (!database) {
     throw new Error('You must connect first!');
   }
-
   return database;
 }
 
 module.exports = {
-  connectToDatabase: connectToDatabase,
-  getDb: getDb
+  connectToDatabase,
+  getDb
 };
