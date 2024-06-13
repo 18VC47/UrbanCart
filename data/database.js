@@ -4,8 +4,8 @@ const MongoClient = mongodb.MongoClient;
 
 let database;
 
-// let Mongo = 'mongodb://127.0.0.1:27017';
-let Mongo = process.env.MONOGO_URL;
+let Mongo = 'mongodb://127.0.0.1:27017';
+// let Mongo = process.env.MONOGO_URL;
 
 // if(process.env.MONOGO_URL){
 //   Mongo = process.env.MONOGO_URL;
