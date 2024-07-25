@@ -17,15 +17,10 @@ function getNewProduct(req, res) {
 }
 
 async function createNewProduct(req, res, next) {
-  // try {
-  // Upload image to Cloudinary
-  const result = await cloudinary.uploader.upload(req.file.path);
 
-  // Create a new product with the Cloudinary URL
-  // const product = new Product({
-  //   ...req.body,
-  //   image: result.secure_url, // Use the secure URL from Cloudinary
-  // });
+  const result = await cloudinary.uploader.upload(req.file.path);
+  // console.log(result);
+
 
   const product = new Product({
     ...req.body,
@@ -38,53 +33,6 @@ async function createNewProduct(req, res, next) {
     next(error);
     return;
   }
-
-  // Save the product to the database
-  // await product.save();
-
-  // Respond to the client
-  // res.status(200).json({
-  //   success: true,
-  //   message: "Uploaded!",
-  //   data: result,
-  // });
-
-  
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(500).json({
-  //     success: false,
-  //     message: "Error"
-  //   });
-  //   next(err);
-  // }
-  // cloudinary.uploader.upload(req.file.path, function (err, result){
-  //   if(err) {
-  //     console.log(err);
-  //     return res.status(500).json({
-  //       success: false,
-  //       message: "Error"
-  //     })
-  //   }
-
-  //   res.status(200).json({
-  //     success: true,
-  //     message:"Uploaded!",
-  //     data: result
-  //   })
-  // })
-
-  // const product = new Product({
-  //   ...req.body,
-  //   image: req.file.filename,
-  // });
-
-  // try {
-  //   await product.save();
-  // } catch (error) {
-  //   next(error);
-  //   return;
-  // }
 
   res.redirect("/admin/products");
 }
@@ -99,24 +47,44 @@ async function getUpdateProduct(req, res, next) {
 }
 
 async function updateProduct(req, res, next) {
-  const product = new Product({
-    ...req.body,
-    _id: req.params.id,
-  });
-
-  if (req.file) {
-    product.replaceImage(req.file.filename);
-  }
-
+  let product;
   try {
+    product = await Product.findById(req.params.id);
+
+    // If a new image file is provided, upload it to Cloudinary
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      product.image = result.secure_url; // Update the image URL
+    }
+
+    // Update other fields
+    Object.assign(product, req.body);
+
     await product.save();
+    res.redirect("/admin/products");
   } catch (error) {
     next(error);
-    return;
   }
-
-  res.redirect("/admin/products");
 }
+// async function updateProduct(req, res, next) {
+//   const product = new Product({
+//     ...req.body,
+//     _id: req.params.id,
+//   });
+
+//   if (req.file) {
+//     product.replaceImage(req.file.filename);
+//   }
+
+//   try {
+//     await product.save();
+//   } catch (error) {
+//     next(error);
+//     return;
+//   }
+
+//   res.redirect("/admin/products");
+// }
 
 async function deleteProduct(req, res, next) {
   let product;
