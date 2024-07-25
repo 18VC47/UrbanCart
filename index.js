@@ -42,7 +42,7 @@ app.use(addCsrfTokenMiddleware);
 app.use(checkAuthStatusMiddleware);
 
 app.use(baseRoutes);
-app.use(authRoutes);
+app.use(authRoutes);  
 app.use(productsRoutes);
 app.use('/cart', cartRoutes);
 app.use('/orders', protectRoutesMiddleware, ordersRoutes);
