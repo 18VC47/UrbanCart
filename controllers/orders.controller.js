@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const stripe = require('stripe')(process.env.STRIPE_KEY); // Use environment variable for secret key
 // const Order = require('../models/order.model');
 // const User = require('../models/user.model');
